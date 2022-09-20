@@ -1,25 +1,37 @@
-import { newHomeTask } from "./home.module";
 
-export const globalModule = (function() {
+
+
+export const mainObject = (function() {
     'use strict';
 
-    const home = {
-        "projectList": [
+    const all = {
+        tasks:[
 
-        ]
-    };
-    const today = {};
-    const week = {};
+        ]};
+   
+    const today = {
+        tasks:[
+            
+        ]};
+
+    const thisWeek = {
+        tasks:[
+            
+        ]};
+
+    const important = {
+        tasks:[
+            
+        ]};
+ 
     const projects = {
-        "projectList": [
+        tasks: [
 
-        ]
-    };
-    const notes = {}; 
+        ]};
     
-    return {
-        home, today, week, projects, notes,
-    }
-})
 
-globalModule[home].projectList.push(newHomeTask);
+    return {
+        all, today, thisWeek, 
+        important, projects,
+    }
+}())
