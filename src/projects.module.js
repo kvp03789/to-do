@@ -19,5 +19,5 @@ export const addToProjects = function(object) {
 }
 
 
-export const newProject = projectFactory("New");
-export const attempt = newProject.createTask("asd", "asd", "asdf", false);
+export const newProject = projectFactory("BuildRoof");
+// export const attempt = newProject.createTask("asd", "asd", "asdf", false);
