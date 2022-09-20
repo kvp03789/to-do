@@ -4,13 +4,13 @@ import { mainObject } from "./global.module";
 const projectFactory = (title) => {
     const taskList = [];
 
-    // createTask = (name, details, date) => {
+    const createTask = (name, details, date, important) => {
+        taskList.push({name, details, date, important}); 
+    };
 
-    //     projectFactory.taskList.push({name, details, date});
-    // };
     
     return {
-        title, taskList
+        title, taskList, createTask, 
     };
 }
 
@@ -20,3 +20,4 @@ export const addToProjects = function(object) {
 
 
 export const newProject = projectFactory("New");
+export const attempt = newProject.createTask("asd", "asd", "asdf", false);
