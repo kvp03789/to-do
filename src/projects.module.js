@@ -8,9 +8,16 @@ const projectFactory = (title) => {
         taskList.push({name, details, date, important}); 
     };
 
-    
+    const deleteTask = function(task) {
+        taskList.forEach((i) => {
+            if (i.name === task){
+                taskList.splice(`${taskList.indexOf(i)}`, 1);
+            }
+        })
+    }
+
     return {
-        title, taskList, createTask, 
+        title, taskList, createTask, deleteTask,
     };
 }
 
@@ -20,4 +27,3 @@ export const addToProjects = function(object) {
 
 
 export const newProject = projectFactory("BuildRoof");
-// export const attempt = newProject.createTask("asd", "asd", "asdf", false);

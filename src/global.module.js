@@ -27,7 +27,13 @@ export const mainObject = (function() {
     const projects = {
         tasks: [
 
-        ]};
+        ],
+        
+        get getTasks() {
+            return this.tasks;
+        }
+        
+    };
     
 
     return {
