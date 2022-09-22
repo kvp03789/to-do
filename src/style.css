@@ -41,6 +41,10 @@ button:hover {
     display: flex;
 }
 
+main {
+  display: flex;
+}
+
 .sidebar {
     height: 100vh;
     width: 350px;
@@ -50,6 +54,16 @@ button:hover {
 }
 
 .home {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.projects {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -80,8 +94,79 @@ button:hover {
     width: auto;
 }
 
+.plus-svg {
+    height: 25px;
+    width: auto;
+}
+
+.sidebar h2 {
+  border-bottom: 2px solid black;
+}
+
+.content {
+    height: 100vh;
+    width: 1000px;
+    
+}
+
+.form-div {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-div div {
+  display: flex;
+  align-items: center;
+}
+
+#name{
+  height: 40px;
+  font-family: 'OpenSans';
+  font-size: 1rem;
+  padding-left: 15px;
+}
+
+.form-buttons-div {
+  justify-content: center;
+  gap: 10px;
+}
+
+#add-button {
+  background-color: rgb(10, 240, 10);
+  color: white;
+  font-weight: 800;
+  height: 30px;
+  width: 75px;
+  font-family: 'OpenSans';
+  border: none;
+  border-radius: 3px;
+}
+
+#cancel-button {
+  background-color: red;
+  color: white;
+  font-weight: 800;
+  height: 30px;
+  width: 75px;
+  font-family: 'OpenSans';
+  border: none;
+  border-radius: 3px;
+}
 
 
+.title-block {
+  width: 100%;
+  height: 100px;
+  background-color: rgb(12, 230, 12);
+  font-family: 'OpenSans';
+  margin: 20px;
+  padding-left: 15px;
+}
+
+.title {
+  color: white;
+}
 
 
 
