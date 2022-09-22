@@ -154,6 +154,27 @@ main {
   border-radius: 3px;
 }
 
+.project-list-item {
+  font-family: 'OpenSans';
+  display: flex;
+  gap: 20px;
+  height: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px;
+  padding-left: 15px;
+}
+
+.project-list-item:hover {
+  background-color: rgb(148, 250, 177);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.project-list-item img {
+  height: 25px;
+  width: auto;
+}
 
 .title-block {
   width: 100%;
@@ -168,9 +189,16 @@ main {
   color: white;
 }
 
+.left {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  flex: 0 0 100px;
+}
 
-
-
+/* .right:hover {
+  background-color: #c6c6c672;
+} */
 
 
 .hidden {

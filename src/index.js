@@ -13,12 +13,12 @@ const testDate2 = new Date();
 //some console log statements for testing adding new projects,  
 //then adding tasks to the project, then sorting tasks to temporal objects.
 
-console.log(addToProjects(newProject));
-console.log(newProject.createTask("materials","very important", testDate, false));
-console.log(newProject.createTask("hire help","look at home depot", testDate2, true))
-console.log(sortImportant());
-console.log(sortToday());
-console.log(sortThisWeek());
+// console.log(addToProjects(newProject));
+// console.log(newProject.createTask("materials","very important", testDate, false));
+// console.log(newProject.createTask("hire help","look at home depot", testDate2, true))
+// console.log(sortImportant());
+// console.log(sortToday());
+// console.log(sortThisWeek());
 console.log(mainObject);
 addHeaderEvent();
 addSidebarEvent();

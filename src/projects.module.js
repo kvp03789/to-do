@@ -1,7 +1,7 @@
 import { mainObject } from "./global.module";
 
 
-const projectFactory = (title) => {
+export const projectFactory = (title) => {
     const taskList = [];
 
     const createTask = (name, details, date, important) => {
@@ -26,4 +26,4 @@ export const addToProjects = function(object) {
 }
 
 
-export const newProject = projectFactory("BuildRoof");
+// export const newProject = projectFactory("BuildRoof");
