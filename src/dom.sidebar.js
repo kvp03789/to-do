@@ -8,9 +8,11 @@ import MenuIcon from '../images/project-menu.svg';
 import VerticalDots from '../images/dots-vertical.svg';
 import {createMainProject} from './dom.main.project.js';
 
-const formDataStore = {
+export const formDataStore = {
     value: 0,
     array: [],
+    counter: 0,
+    dataVal: 0,
     getValue() {return this.value},
     setValue(x) {this.value = x}
 }
@@ -86,6 +88,8 @@ const makeProjectListItem = function() {
 
     const newItem = document.createElement("div");
     newItem.classList.add("project-list-item")
+    newItem.setAttribute("data-index", String(formDataStore.counter))
+    formDataStore.counter++;
     const menuIcon = new Image();
     menuIcon.src = MenuIcon;
     const projectTitle = document.createElement("span");
@@ -111,6 +115,7 @@ const makeProjectListItem = function() {
     newItem.addEventListener("click", (e) => {
         clearDom();
         createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
+        formDataStore.dataVal = (e.target.dataset.index);
     })
 
 }
