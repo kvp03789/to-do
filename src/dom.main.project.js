@@ -6,7 +6,7 @@ import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
 import {formDataStore} from './dom.sidebar.js';
 
-const createTaskItem = function(name, details, date, ) {
+export const createTaskItem = function(name, details, date, ) {
     const taskContainer = document.querySelector(".task-container");
     const newItemBox = document.createElement("div");
     const left = document.createElement("div");
@@ -84,8 +84,8 @@ const createTaskForm = function(project, num) {
         e.preventDefault();
         newTaskFormDiv.classList.add("hidden");
         const testDate = new Date(2022, 8, 22);
-        mainObject.projects.tasks[0].createTask(String(value1),"very important", testDate, false)
-        createTaskItem(String(value1),"very important", "09/09/23", false);
+        project.createTask(String(value1),"very important", dateInput.value, false)
+        createTaskItem(String(value1),"very very important", dateInput.value, false);
     })
 }
 
@@ -117,7 +117,7 @@ export const createMainProject = function(project) {
     contentDiv.append(titleBlock, taskContainer, taskButtonDiv);
 
     taskButtonDiv.addEventListener("click", () => {
-        createTaskForm(formDataStore.array[0]);
+        createTaskForm(project);
     })
 }
 

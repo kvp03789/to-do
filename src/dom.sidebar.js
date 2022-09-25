@@ -6,7 +6,7 @@ import { createMainImportant } from "./dom.main.important";
 import { projectFactory, addToProjects } from "./projects.module.js"
 import MenuIcon from '../images/project-menu.svg';
 import VerticalDots from '../images/dots-vertical.svg';
-import {createMainProject} from './dom.main.project.js';
+import {createMainProject, createTaskItem} from './dom.main.project.js';
 
 export const formDataStore = {
     value: 0,
@@ -114,8 +114,18 @@ const makeProjectListItem = function() {
 
     newItem.addEventListener("click", (e) => {
         clearDom();
-        createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
-        formDataStore.dataVal = (e.target.dataset.index);
+        if (mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)].taskList.length === 0) {
+            createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
+            formDataStore.dataVal = (e.target.dataset.index);
+        }
+        else {
+            clearDom();
+            createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
+            mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)].taskList.forEach((item) => { 
+                createTaskItem(String(item.name), String(item.details), item.date)
+            })
+        }
+        
     })
 
 }
