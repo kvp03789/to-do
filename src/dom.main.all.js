@@ -1,5 +1,7 @@
 export const createMainAll = function() {
     //for the title block
+    const taskContainer = document.createElement("div");
+    taskContainer.classList.add(".task-container");
     const contentDiv = document.querySelector(".content");
     const titleBlock = document.createElement("div");
     const title = document.createElement("h1");
@@ -8,7 +10,7 @@ export const createMainAll = function() {
     title.innerText = "All Tasks";
 
     titleBlock.append(title);
-    contentDiv.append(titleBlock);
+    contentDiv.append(titleBlock, taskContainer);
     //for tasks
 
 }

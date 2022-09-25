@@ -1,6 +1,7 @@
 import PlusIcon from '../images/plus.svg';
 // import StarIcon from '../images/star-svgrepo-com.svg';
-import StarFillIcon from '../images/star-fill.svg';
+import StarIcon from '../images/important-star.svg';
+import FilledStarIcon from '../images/filled.svg';
 import VerticalDots from '../images/dots-vertical.svg';
 import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
@@ -8,6 +9,7 @@ import {formDataStore} from './dom.sidebar.js';
 
 export const createTaskItem = function(name, details, date, ) {
     const taskContainer = document.querySelector(".task-container");
+    const contentDiv = document.querySelector(".content");
     const newItemBox = document.createElement("div");
     const left = document.createElement("div");
     const right = document.createElement("div");
@@ -17,19 +19,19 @@ export const createTaskItem = function(name, details, date, ) {
     const dateDiv = document.createElement("div");
     const dateSpan = document.createElement("span");
     const star = new Image();
-    // star.src = StarIcon;
-    const starFill = new Image();
     const verticalDots = new Image();
+    const filledStar = new Image();
+    
 
     verticalDots.src = VerticalDots;
-    starFill.src = StarFillIcon;
+    star.src = StarIcon;
+    filledStar.src = FilledStarIcon
     titleSpan.classList.add("task-title-span")
     dateDiv.classList.add(".date-div")
     dateSpan.classList.add(".task-date-span")
     newItemBox.classList.add("new-task-item");
     dateDiv.classList.add("date-div")
     star.classList.add("star-svg");
-    starFill.classList.add("star-svg");
     right.classList.add("task-right");
     left.classList.add("task-left")
 
@@ -38,10 +40,20 @@ export const createTaskItem = function(name, details, date, ) {
     dateSpan.innerText = date;         //data from obj
 
     dateDiv.append(dateSpan);
-    right.append(dateDiv, starFill)
+    right.append(dateDiv, star)
     left.append(checkBox, titleSpan);
     newItemBox.append(left, right);
-    taskContainer.append(newItemBox);
+    contentDiv.append(newItemBox);
+    // taskContainer.append(newItemBox);
+
+    const starEvent = function () {star.addEventListener("click", (e) => {
+        if (e.target.src === StarIcon){
+            e.target.src = FilledStarIcon;
+        }
+        else {e.target.src = StarIcon}
+        })
+    }
+    starEvent();
 }
 
 const createTaskForm = function(project, num) {

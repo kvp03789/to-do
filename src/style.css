@@ -93,6 +93,16 @@ main {
     border-radius: 5px;
 }
 
+.sub-title2 {
+  display: flex;
+  gap: 20px;
+  height: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px;
+  padding-left: 15px;
+}
+
 .home-svg {
     height: 25px;
     width: auto;
@@ -361,4 +371,14 @@ label {
   
   .slider.round:before {
     border-radius: 50%;
+  }
+
+  .selected {
+    background-color: #c6c6c6;
+    border-radius: 5px;
+  }
+
+  .filled {
+    filter: invert(84%) sepia(66%) saturate(1882%) hue-rotate(355deg) brightness(99%) contrast(103%);
+    fill: #ffee00;
   }

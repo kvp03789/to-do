@@ -27,17 +27,29 @@ export const addSidebarEvent = function() {
     const inputField = document.querySelector("#name");
     const cancelButton = document.querySelector("#cancel-button");
     const addButton = document.querySelector("#add-button");
+
+    const btnContainer = document.querySelector(".home");
+    const btns = document.getElementsByClassName("sub-title");
+    for (let i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", (e) => {
+            let current = document.getElementsByClassName("selected");
+
+            if(current.length > 0) {
+                current[0].className = current[0].className.replace("selected", "");
+            }
+            e.target.classList.add("selected");
+        });
+        
+    }
     
 
     allTitle.addEventListener("click", () => {
         clearDom();
         createMainAll();
-        // mainObject.projects.tasks.forEach((i) => {
-        //     i.taskList.forEach((j) => {
-        //         console.log(j.name);
-        //     })
-        // })
-    });
+        mainObject.projects.tasks.forEach((project) => {
+            project.taskList.forEach((item) => {
+            createTaskItem(String(item.name), String(item.details), item.date)
+            })});})
 
     todayTitle.addEventListener("click", () => {
         clearDom();
@@ -81,8 +93,8 @@ export const addSidebarEvent = function() {
         formDiv.classList.add("hidden");
         makeProjectListItem();
     })
-}
 
+}
 const makeProjectListItem = function() {
     const projectsList = document.querySelector(".projects-list");
 
