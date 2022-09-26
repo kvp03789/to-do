@@ -48,15 +48,17 @@ export const addSidebarEvent = function() {
         createMainAll();
         mainObject.projects.tasks.forEach((project) => {
             project.taskList.forEach((item) => {
-            createTaskItem(String(item.name), String(item.details), item.date)
-            })});})
+                createTaskItem(String(item.name), String(item.details), item.date)
+            })
+        });
+    })
 
     todayTitle.addEventListener("click", () => {
         clearDom();
         createMainToday();
-        // mainObject.today.tasks.forEach((i) => {
-        //     console.log(i.name);
-        // })
+        mainObject.today.tasks.forEach((project) => {          
+            createTaskItem(String(project.name), String(project.details), project.date);
+            })
     });
 
     weekTitle.addEventListener("click", () => {
@@ -70,9 +72,9 @@ export const addSidebarEvent = function() {
     importantTitle.addEventListener("click", () => {
         clearDom();
         createMainImportant();
-        // mainObject.important.tasks.forEach((i) => {
-        //     console.log(i.name);
-        // })
+        mainObject.important.tasks.forEach((project) => {
+            createTaskItem(String(project.name), String(project.details), project.date);
+        })
     });
 
     addProjects.addEventListener("click", () => { 

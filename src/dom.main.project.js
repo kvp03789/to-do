@@ -6,6 +6,7 @@ import VerticalDots from '../images/dots-vertical.svg';
 import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
 import {formDataStore} from './dom.sidebar.js';
+import {sortToday, sortThisWeek, sortImportant} from './sort.module.js'
 
 export const createTaskItem = function(name, details, date, ) {
     const taskContainer = document.querySelector(".task-container");
@@ -22,7 +23,7 @@ export const createTaskItem = function(name, details, date, ) {
     const verticalDots = new Image();
     const filledStar = new Image();
     
-
+    star.setAttribute("id", "important-star")
     verticalDots.src = VerticalDots;
     star.src = StarIcon;
     filledStar.src = FilledStarIcon
@@ -32,6 +33,7 @@ export const createTaskItem = function(name, details, date, ) {
     newItemBox.classList.add("new-task-item");
     dateDiv.classList.add("date-div")
     star.classList.add("star-svg");
+    verticalDots.classList.add("dots-svg")
     right.classList.add("task-right");
     left.classList.add("task-left")
 
@@ -39,21 +41,55 @@ export const createTaskItem = function(name, details, date, ) {
     titleSpan.innerText = name; //data from obj
     dateSpan.innerText = date;         //data from obj
 
+    const optionsMenu = document.createElement("div");
+    const editOption = document.createElement("div");
+    const deleteOption = document.createElement("div");
+
+    optionsMenu.classList.add("options-menu");
+    editOption.classList.add("option-item");
+    deleteOption.classList.add("option-item");
+    optionsMenu.classList.add("hidden");
+    editOption.innerText = "Edit";
+    deleteOption.innerText = "Delete";
+    optionsMenu.append(editOption, deleteOption);
+
     dateDiv.append(dateSpan);
-    right.append(dateDiv, star)
+    right.append(dateDiv, star, verticalDots, optionsMenu)
     left.append(checkBox, titleSpan);
     newItemBox.append(left, right);
     contentDiv.append(newItemBox);
-    // taskContainer.append(newItemBox);
+    
 
-    const starEvent = function () {star.addEventListener("click", (e) => {
-        if (e.target.src === StarIcon){
-            e.target.src = FilledStarIcon;
-        }
-        else {e.target.src = StarIcon}
-        })
-    }
     starEvent();
+    verticalDotsEvent();
+}
+
+const starEvent = function () {
+    document.querySelector("#important-star").addEventListener("click", (e) => {
+    if (e.target.src === StarIcon){
+        e.target.src = FilledStarIcon;
+    }
+    else {e.target.src = StarIcon}
+    })
+}
+
+const verticalDotsEvent = function() {
+    const dotsIcon = document.querySelector(".dots-svg")
+    dotsIcon.addEventListener("click", (e) => {
+        document.querySelector(".options-menu").classList.toggle("hidden");
+    })
+}
+
+const displayOptions = function(ele) {
+    const optionsMenu = document.createElement("div");
+    const editOption = document.createElement("div");
+    const deleteOption = document.createElement("div");
+
+    optionsMenu.classList.add("options-menu");
+    editOption.classList.add("option-item");
+    deleteOption.classList.add("option-item");
+    optionsMenu.append(editOption, deleteOption);
+    ele.parentElement.append(optionsMenu);
 }
 
 const createTaskForm = function(project, num) {
@@ -98,6 +134,9 @@ const createTaskForm = function(project, num) {
         const testDate = new Date(2022, 8, 22);
         project.createTask(String(value1),"very important", dateInput.value, false)
         createTaskItem(String(value1),"very very important", dateInput.value, false);
+        sortToday();
+        // sortThisWeek();
+        sortImportant();
     })
 }
 

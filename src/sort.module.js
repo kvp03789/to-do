@@ -1,5 +1,6 @@
 import { mainObject } from "./global.module";
 import {isThisWeek} from 'date-fns';
+import { getDate } from "date-fns";
 
 
 export const sortImportant = function() {
@@ -34,9 +35,7 @@ export const sortThisWeek = function() {
 
 const isToday = function(date) {
     const today = new Date();
-    return date.getDate() == today.getDate() &&
-        date.getMonth() == today.getMonth() &&
-        date.getFullYear() == today.getFullYear()
+    return (today.toDateString() == new Date(date).toDateString())
 }
 
 // const isWeek = function(date) {
