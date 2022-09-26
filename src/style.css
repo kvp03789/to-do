@@ -304,6 +304,10 @@ main {
     display: none;
 }
 
+.hidden2 {
+  transform: scale(0);
+}
+
 label {
   display: block;
   font-weight: 800;
@@ -313,6 +317,7 @@ label {
     height: 25px;
     width: 25px;
 }
+
 
 .options-menu {
   height: 80px;
@@ -329,6 +334,7 @@ label {
   position:relative; 
   right: 75px;
   bottom: 50px;
+  border-radius: 5px;
 }
 
 .option-item {
@@ -338,8 +344,27 @@ label {
 }
 
 .option-item:hover {
-  background-color: #c6c6c6;
+  background-color: #ddd9d9;
   cursor: pointer;
+  border-radius: 5px;
+}
+
+.dots-container:hover {
+  background-color: #ddd9d9;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dots-selected {
+  background-color: #ddd9d9;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dots-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   
 }
 

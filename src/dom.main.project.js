@@ -44,24 +44,35 @@ export const createTaskItem = function(name, details, date, ) {
     const optionsMenu = document.createElement("div");
     const editOption = document.createElement("div");
     const deleteOption = document.createElement("div");
-
+    const dotsContainer = document.createElement("div");
+    dotsContainer.classList.add("dots-container");
     optionsMenu.classList.add("options-menu");
     editOption.classList.add("option-item");
     deleteOption.classList.add("option-item");
-    optionsMenu.classList.add("hidden");
+    optionsMenu.classList.add("hidden2");
     editOption.innerText = "Edit";
     deleteOption.innerText = "Delete";
     optionsMenu.append(editOption, deleteOption);
+    dotsContainer.append(verticalDots);
 
     dateDiv.append(dateSpan);
-    right.append(dateDiv, star, verticalDots, optionsMenu)
+    right.append(dateDiv, star, dotsContainer, optionsMenu)
     left.append(checkBox, titleSpan);
     newItemBox.append(left, right);
     contentDiv.append(newItemBox);
+    document.querySelectorAll(".option-item").forEach((i) => {
+        i.addEventListener("click", (e) => {
+            console.log("it works");
+        })
+    })
+
     
+    verticalDots.addEventListener("click", (e) => {
+        optionsMenu.classList.toggle("hidden2");
+        dotsContainer.classList.toggle("dots-selected");
+    });
 
     starEvent();
-    verticalDotsEvent();
 }
 
 const starEvent = function () {
@@ -73,12 +84,6 @@ const starEvent = function () {
     })
 }
 
-const verticalDotsEvent = function() {
-    const dotsIcon = document.querySelector(".dots-svg")
-    dotsIcon.addEventListener("click", (e) => {
-        document.querySelector(".options-menu").classList.toggle("hidden");
-    })
-}
 
 const displayOptions = function(ele) {
     const optionsMenu = document.createElement("div");
