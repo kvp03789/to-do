@@ -267,9 +267,14 @@ main {
   padding: 10px;
 }
 
-.task-title-span, .task-date-span {
+.task-title-span, .task-date-span, .star-span {
   font-family: 'OpenSans';
   font-size: 1.2rem;
+}
+
+.star-div {
+  display: flex;
+  justify-content: space-between;
 }
 
 .task-details-span {

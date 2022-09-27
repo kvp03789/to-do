@@ -7,6 +7,7 @@ import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
 import {formDataStore} from './dom.sidebar.js';
 import {sortToday, sortThisWeek, sortImportant} from './sort.module.js';
+import { clearDom } from './dom.main.all';
 
 
 export const createTaskItem = function(name, details, date, important) {
@@ -56,6 +57,8 @@ export const createTaskItem = function(name, details, date, important) {
     optionsMenu.classList.add("options-menu");
     editOption.classList.add("option-item");
     deleteOption.classList.add("option-item");
+    editOption.setAttribute("id", "option-edit");
+    deleteOption.setAttribute("id", "option-delete");
     optionsMenu.classList.add("hidden2");
     editOption.innerText = "Edit";
     deleteOption.innerText = "Delete";
@@ -68,11 +71,20 @@ export const createTaskItem = function(name, details, date, important) {
     left.append(checkBox, titleSpan, detailsSpan);
     newItemBox.append(left, right);
     taskContainer.append(newItemBox);
-    document.querySelectorAll(".option-item").forEach((i) => {
-        i.addEventListener("click", (e) => {
-            console.log("it works");
+    deleteOption.addEventListener("click", (e) => {
+        console.log("it works");
+        mainObject.projects.tasks.forEach((proj) => {
+                proj.taskList.forEach((ind) => {
+                    if((String(proj.taskList.indexOf(ind))) == (e.target.parentElement.parentElement.parentElement.dataset.index)) {
+                        proj.deleteTask((proj.taskList[parseInt(e.target.parentElement.parentElement.parentElement.dataset.index)].name))
+            }
+        })
+                    
+                
+            
         })
     })
+    
 
     
     verticalDots.addEventListener("click", (e) => {
@@ -137,6 +149,14 @@ const createTaskForm = function(project, num) {
     const buttonDiv = document.createElement("div");
     const addButton = document.createElement("button");
     const cancelButton = document.createElement("button");
+    const star = new Image();
+    star.src = StarIcon;
+    star.classList.add("star-svg");
+    const starDiv = document.createElement("div");
+    const starSpan = document.createElement("span");
+    starSpan.innerText = "Mark this task as important?"
+    starSpan.classList.add("star-span");
+    starDiv.classList.add("star-div");
 
     const projectReference = num;
 
@@ -152,20 +172,31 @@ const createTaskForm = function(project, num) {
     dateInput.setAttribute("type", "date");
     addButton.setAttribute("type", "submit");
 
+    starDiv.append(starSpan, star);
     titleLabel.append(titleInput);
     detailsLabel.append(detailsInput);
     dateLabel.append(dateInput);
     buttonDiv.append(addButton, cancelButton);
-    newTaskFormDiv.append(titleLabel, detailsLabel, dateLabel, buttonDiv);
+    newTaskFormDiv.append(titleLabel, detailsLabel, dateLabel, starDiv, buttonDiv);
     taskDiv.append(newTaskFormDiv);
+    let importantValue = 0;
+    star.addEventListener("click", (e) => {
+        if (e.target.src === StarIcon){
+            e.target.src = FilledStarIcon;
+            importantValue = 1;
+        }
+        else {e.target.src = StarIcon;
+            importantValue = 0;
+        }
+    })
 
     addButton.addEventListener("click", (e) => {
         let value1 = titleInput.value;
         e.preventDefault();
         newTaskFormDiv.classList.add("hidden");
         const testDate = new Date(2022, 8, 22);
-        project.createTask(String(value1),"very important", dateInput.value, false)
-        createTaskItem(String(value1),"very very important", dateInput.value, false);
+        project.createTask(String(value1),detailsInput.value, dateInput.value, importantValue)
+        createTaskItem(String(value1),detailsInput.value, dateInput.value, importantValue);
         sortToday();
         // sortThisWeek();
         sortImportant();
