@@ -71,21 +71,44 @@ export const createTaskItem = function(name, details, date, important) {
     left.append(checkBox, titleSpan, detailsSpan);
     newItemBox.append(left, right);
     taskContainer.append(newItemBox);
+
     deleteOption.addEventListener("click", (e) => {
-        console.log("it works");
+        optionsMenu.classList.toggle("hidden2");
+        optionsMenu.classList.toggle("dots-selected");
         mainObject.projects.tasks.forEach((proj) => {
                 proj.taskList.forEach((ind) => {
                     if((String(proj.taskList.indexOf(ind))) == (e.target.parentElement.parentElement.parentElement.dataset.index)) {
-                        proj.deleteTask((proj.taskList[parseInt(e.target.parentElement.parentElement.parentElement.dataset.index)].name))
-            }
+                        proj.deleteTask((proj.taskList[parseInt(e.target.parentElement.parentElement.parentElement.dataset.index)].name));
+                        e.target.parentElement.parentElement.parentElement.remove();
+                        clearDom();
+                        // createMainProject(proj);
+                        if (proj.taskList.length === 0) {
+                            createMainProject(proj);
+                        }
+                        else {
+                            clearDom();
+                            createMainProject(proj);
+                            proj.taskList.forEach((item) => { 
+                                createTaskItem(String(item.name), String(item.details), item.date, item.important)
+                            })
+                        }
+                }
+            })        
         })
-                    
-                
-            
+        
+        
+    })
+
+    editOption.addEventListener("click", (e) => {
+        mainObject.projects.tasks.forEach((proj) => {
+            proj.taskList.forEach((ind) => {
+                if((String(proj.taskList.indexOf(ind))) == (e.target.parentElement.parentElement.parentElement.dataset.index)) {
+                    createTaskForm(proj);
+                    console.log(proj);
+                }    
+            })
         })
     })
-    
-
     
     verticalDots.addEventListener("click", (e) => {
         optionsMenu.classList.toggle("hidden2");
