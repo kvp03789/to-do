@@ -141,7 +141,7 @@ const makeProjectListItem = function() {
             clearDom();
             createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
             mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)].taskList.forEach((item) => { 
-                createTaskItem(String(item.name), String(item.details), item.date, item.important)
+                createTaskItem(String(item.name), String(item.details), item.date, item.important, mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)])
             })
         }
         

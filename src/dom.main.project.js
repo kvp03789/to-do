@@ -10,7 +10,7 @@ import {sortToday, sortThisWeek, sortImportant} from './sort.module.js';
 import { clearDom } from './dom.main.all';
 
 
-export const createTaskItem = function(name, details, date, important) {
+export const createTaskItem = function(name, details, date, important, project) {
     const taskContainer = document.querySelector(".task-container");
     const contentDiv = document.querySelector(".content");
     const newItemBox = document.createElement("div");
@@ -100,43 +100,46 @@ export const createTaskItem = function(name, details, date, important) {
     })
 
     editOption.addEventListener("click", (e) => {
+        optionsMenu.classList.toggle("hidden2");
+        optionsMenu.classList.toggle("dots-selected");
         mainObject.projects.tasks.forEach((proj) => {
             proj.taskList.forEach((ind) => {
                 if((String(proj.taskList.indexOf(ind))) == (e.target.parentElement.parentElement.parentElement.dataset.index)) {
-                    createTaskForm(proj);
-                    console.log(proj);
+                    createUpdateTaskForm(proj, e.target.parentElement.parentElement.parentElement.dataset.index);
+                    console.log(proj, e.target.parentElement.parentElement.parentElement.dataset.index);
                 }    
             })
         })
     })
     
+
     verticalDots.addEventListener("click", (e) => {
         optionsMenu.classList.toggle("hidden2");
         dotsContainer.classList.toggle("dots-selected");
     });
 
-    starEvent(star);
+    starEvent(star, project);
 
     newItemBox.setAttribute("data-index", String(formDataStore.taskCounter));
     formDataStore.taskCounter++;
 }
 
-const starEvent = function (x) {
+const starEvent = function (x, project) {
     x.addEventListener("click", (e) => {
         if (e.target.src === StarIcon){
             e.target.src = FilledStarIcon;
         }
         else {e.target.src = StarIcon}
 
-        mainObject.projects.tasks.forEach((ind) => {
-            ind.taskList.forEach((i) => {
-                if (String(ind.taskList.indexOf(i)) == e.target.parentElement.parentElement.dataset.index) {
+        // mainObject.projects.tasks.forEach((ind) => {
+            project.taskList.forEach((i) => {
+                if (String(project.taskList.indexOf(i)) == e.target.parentElement.parentElement.dataset.index) {
                     if(i.important == false) {
                         i.important = true;
                     } else {i.important = false}
                 }
             })
-        })
+        // })
         sortImportant();
         })
 
@@ -144,18 +147,84 @@ const starEvent = function (x) {
     
 }
 
+const createUpdateTaskForm = function(project, num) {
+    const taskDiv = document.querySelector(".task-container");
+    const newTaskFormDiv = document.createElement("div");
+    const form = document.createElement("form");
+    const titleLabel = document.createElement("label");
+    const detailsLabel = document.createElement("label");
+    const dateLabel = document.createElement("label");
+    const titleInput = document.createElement("input");
+    const detailsInput = document.createElement("input");
+    const dateInput = document.createElement("input");
+    const buttonDiv = document.createElement("div");
+    const addButton = document.createElement("button");
+    const cancelButton = document.createElement("button");
+    const star = new Image();
+    star.src = StarIcon;
+    star.classList.add("star-svg");
+    const starDiv = document.createElement("div");
+    const starSpan = document.createElement("span");
+    starSpan.innerText = "Mark this task as important?"
+    starSpan.classList.add("star-span");
+    starDiv.classList.add("star-div");
 
-// const displayOptions = function(ele) {
-//     const optionsMenu = document.createElement("div");
-//     const editOption = document.createElement("div");
-//     const deleteOption = document.createElement("div");
+    titleLabel.innerText = "Title:";
+    detailsLabel.innerText = "Details(optional):";
+    dateLabel.innerText = "Date:";
+    addButton.innerText = "Add";
+    cancelButton.innerText = "Cancel";
 
-//     optionsMenu.classList.add("options-menu");
-//     editOption.classList.add("option-item");
-//     deleteOption.classList.add("option-item");
-//     optionsMenu.append(editOption, deleteOption);
-//     ele.parentElement.append(optionsMenu);
-// }
+    newTaskFormDiv.classList.add("new-task-form-div");
+    addButton.setAttribute("id", "add-button");
+    cancelButton.setAttribute("id", "cancel-button");
+    dateInput.setAttribute("type", "date");
+    addButton.setAttribute("type", "submit");
+
+    starDiv.append(starSpan, star);
+    titleLabel.append(titleInput);
+    detailsLabel.append(detailsInput);
+    dateLabel.append(dateInput);
+    buttonDiv.append(addButton, cancelButton);
+    newTaskFormDiv.append(titleLabel, detailsLabel, dateLabel, starDiv, buttonDiv);
+    taskDiv.append(newTaskFormDiv);
+    let importantValue = 0;
+    star.addEventListener("click", (e) => {
+        if (e.target.src === StarIcon){
+            e.target.src = FilledStarIcon;
+            importantValue = 1;
+        }
+        else {e.target.src = StarIcon;
+            importantValue = 0;
+        }
+    })
+
+    addButton.addEventListener("click", (e) => {
+        let value1 = titleInput.value;
+        e.preventDefault();
+        newTaskFormDiv.classList.add("hidden");
+        project.taskList[parseInt(num)].name = String(value1);
+        project.taskList[parseInt(num)].details = detailsInput.value;
+        project.taskList[parseInt(num)].date = dateInput.value;
+        project.taskList[parseInt(num)].important = importantValue;
+
+        // createMainProject(proj);
+        if (project.taskList.length === 0) {
+            createMainProject(project);
+        }
+        else {
+            clearDom();
+            createMainProject(project);
+            project.taskList.forEach((arr) => {
+                createTaskItem(arr.name, arr.details, arr.date, arr.important, project);
+            })
+            sortToday();
+        // sortThisWeek();
+            sortImportant();
+        }
+    })
+}
+
 
 const createTaskForm = function(project, num) {
     const taskDiv = document.querySelector(".task-container");
@@ -219,7 +288,7 @@ const createTaskForm = function(project, num) {
         newTaskFormDiv.classList.add("hidden");
         const testDate = new Date(2022, 8, 22);
         project.createTask(String(value1),detailsInput.value, dateInput.value, importantValue)
-        createTaskItem(String(value1),detailsInput.value, dateInput.value, importantValue);
+        createTaskItem(String(value1),detailsInput.value, dateInput.value, importantValue, project);
         sortToday();
         // sortThisWeek();
         sortImportant();
