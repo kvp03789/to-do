@@ -15,7 +15,7 @@ export const projectFactory = (title) => {
             }
         })
     }
-
+    
     return {
         title, taskList, createTask, deleteTask,
     };

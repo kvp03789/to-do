@@ -1,7 +1,9 @@
+import {formDataStore} from './dom.sidebar.js';
+
 export const createMainAll = function() {
     //for the title block
     const taskContainer = document.createElement("div");
-    taskContainer.classList.add(".task-container");
+    taskContainer.classList.add("task-container");
     const contentDiv = document.querySelector(".content");
     const titleBlock = document.createElement("div");
     const title = document.createElement("h1");
@@ -17,6 +19,7 @@ export const createMainAll = function() {
 
 export const clearDom = function() {
     const contentDiv = document.querySelector(".content");
+    formDataStore.taskCounter = 0;
     while(contentDiv.firstChild) {
         contentDiv.firstChild.remove();
     }

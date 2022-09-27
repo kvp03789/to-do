@@ -4,6 +4,7 @@ import { getDate } from "date-fns";
 
 
 export const sortImportant = function() {
+    mainObject.important.tasks.length = 0;
     mainObject.projects.tasks.forEach((e) => {
         e.taskList.forEach((i) => {
             if (i.important === true){

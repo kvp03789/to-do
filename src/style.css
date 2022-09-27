@@ -272,6 +272,11 @@ main {
   font-size: 1.2rem;
 }
 
+.task-details-span {
+  font-family: 'OpenSans';
+  font-size: .8rem;
+}
+
 .date-div {
   border: 1px solid black;
   border-radius: 5px;
@@ -332,14 +337,14 @@ label {
   align-items: center;
   gap: 10px;
   position:relative; 
-  right: 75px;
+  right: 40px;
   bottom: 50px;
   border-radius: 5px;
 }
 
 .option-item {
   width: 100%;
-  padding: 5px;
+  padding: 3px;
   text-align: center;
 }
 

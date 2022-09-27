@@ -6,9 +6,10 @@ import VerticalDots from '../images/dots-vertical.svg';
 import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
 import {formDataStore} from './dom.sidebar.js';
-import {sortToday, sortThisWeek, sortImportant} from './sort.module.js'
+import {sortToday, sortThisWeek, sortImportant} from './sort.module.js';
 
-export const createTaskItem = function(name, details, date, ) {
+
+export const createTaskItem = function(name, details, date, important) {
     const taskContainer = document.querySelector(".task-container");
     const contentDiv = document.querySelector(".content");
     const newItemBox = document.createElement("div");
@@ -17,6 +18,7 @@ export const createTaskItem = function(name, details, date, ) {
     const checkBox = document.createElement("input");
     checkBox.setAttribute("type", "radio");
     const titleSpan = document.createElement("span");
+    const detailsSpan = document.createElement("span");
     const dateDiv = document.createElement("div");
     const dateSpan = document.createElement("span");
     const star = new Image();
@@ -25,20 +27,25 @@ export const createTaskItem = function(name, details, date, ) {
     
     star.setAttribute("id", "important-star")
     verticalDots.src = VerticalDots;
-    star.src = StarIcon;
+    if(important == true) {star.src = FilledStarIcon}
+    else {star.src = StarIcon;}
+    
     filledStar.src = FilledStarIcon
     titleSpan.classList.add("task-title-span")
-    dateDiv.classList.add(".date-div")
-    dateSpan.classList.add(".task-date-span")
+    detailsSpan.classList.add("task-details-span");
+    dateDiv.classList.add(".date-div");
+    dateSpan.classList.add(".task-date-span");
     newItemBox.classList.add("new-task-item");
     dateDiv.classList.add("date-div")
     star.classList.add("star-svg");
+    filledStar.classList.add("star-svg");
     verticalDots.classList.add("dots-svg")
     right.classList.add("task-right");
     left.classList.add("task-left")
 
 
     titleSpan.innerText = name; //data from obj
+    detailsSpan.innerText = details; //data from obj
     dateSpan.innerText = date;         //data from obj
 
     const optionsMenu = document.createElement("div");
@@ -56,10 +63,11 @@ export const createTaskItem = function(name, details, date, ) {
     dotsContainer.append(verticalDots);
 
     dateDiv.append(dateSpan);
+    
     right.append(dateDiv, star, dotsContainer, optionsMenu)
-    left.append(checkBox, titleSpan);
+    left.append(checkBox, titleSpan, detailsSpan);
     newItemBox.append(left, right);
-    contentDiv.append(newItemBox);
+    taskContainer.append(newItemBox);
     document.querySelectorAll(".option-item").forEach((i) => {
         i.addEventListener("click", (e) => {
             console.log("it works");
@@ -72,33 +80,52 @@ export const createTaskItem = function(name, details, date, ) {
         dotsContainer.classList.toggle("dots-selected");
     });
 
-    starEvent();
+    starEvent(star);
+
+    newItemBox.setAttribute("data-index", String(formDataStore.taskCounter));
+    formDataStore.taskCounter++;
 }
 
-const starEvent = function () {
-    document.querySelector("#important-star").addEventListener("click", (e) => {
-    if (e.target.src === StarIcon){
-        e.target.src = FilledStarIcon;
-    }
-    else {e.target.src = StarIcon}
-    })
+const starEvent = function (x) {
+    x.addEventListener("click", (e) => {
+        if (e.target.src === StarIcon){
+            e.target.src = FilledStarIcon;
+        }
+        else {e.target.src = StarIcon}
+
+        mainObject.projects.tasks.forEach((ind) => {
+            ind.taskList.forEach((i) => {
+                if (String(ind.taskList.indexOf(i)) == e.target.parentElement.parentElement.dataset.index) {
+                    if(i.important == false) {
+                        i.important = true;
+                    } else {i.important = false}
+                }
+            })
+        })
+        sortImportant();
+        })
+
+        
+    
 }
 
 
-const displayOptions = function(ele) {
-    const optionsMenu = document.createElement("div");
-    const editOption = document.createElement("div");
-    const deleteOption = document.createElement("div");
+// const displayOptions = function(ele) {
+//     const optionsMenu = document.createElement("div");
+//     const editOption = document.createElement("div");
+//     const deleteOption = document.createElement("div");
 
-    optionsMenu.classList.add("options-menu");
-    editOption.classList.add("option-item");
-    deleteOption.classList.add("option-item");
-    optionsMenu.append(editOption, deleteOption);
-    ele.parentElement.append(optionsMenu);
-}
+//     optionsMenu.classList.add("options-menu");
+//     editOption.classList.add("option-item");
+//     deleteOption.classList.add("option-item");
+//     optionsMenu.append(editOption, deleteOption);
+//     ele.parentElement.append(optionsMenu);
+// }
 
 const createTaskForm = function(project, num) {
     const taskDiv = document.querySelector(".task-container");
+    // const taskDiv = document.createElement("div"); 
+    // taskDiv.classList.add("task-container");
     const newTaskFormDiv = document.createElement("div");
     const form = document.createElement("form");
     const titleLabel = document.createElement("label");
@@ -170,6 +197,7 @@ export const createMainProject = function(project) {
     taskButtonDiv.append(plusIcon, addTaskSpan);
 
     titleBlock.append(title);
+    contentDiv.prepend(titleBlock);
     contentDiv.append(titleBlock, taskContainer, taskButtonDiv);
 
     taskButtonDiv.addEventListener("click", () => {

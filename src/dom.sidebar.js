@@ -12,6 +12,7 @@ export const formDataStore = {
     value: 0,
     array: [],
     counter: 0,
+    taskCounter: 0,
     dataVal: 0,
     getValue() {return this.value},
     setValue(x) {this.value = x}
@@ -48,7 +49,7 @@ export const addSidebarEvent = function() {
         createMainAll();
         mainObject.projects.tasks.forEach((project) => {
             project.taskList.forEach((item) => {
-                createTaskItem(String(item.name), String(item.details), item.date)
+                createTaskItem(String(item.name), String(item.details), item.date, item.important)
             })
         });
     })
@@ -57,7 +58,7 @@ export const addSidebarEvent = function() {
         clearDom();
         createMainToday();
         mainObject.today.tasks.forEach((project) => {          
-            createTaskItem(String(project.name), String(project.details), project.date);
+            createTaskItem(String(project.name), String(project.details), project.date, project.important);
             })
     });
 
@@ -72,8 +73,12 @@ export const addSidebarEvent = function() {
     importantTitle.addEventListener("click", () => {
         clearDom();
         createMainImportant();
+        const taskDiv = document.createElement("div");
+        const contentDiv = document.querySelector(".content");
+        taskDiv.classList.add("task-container");
+        contentDiv.append(taskDiv);       
         mainObject.important.tasks.forEach((project) => {
-            createTaskItem(String(project.name), String(project.details), project.date);
+            createTaskItem(String(project.name), String(project.details), project.date, project.important);
         })
     });
 
@@ -136,7 +141,7 @@ const makeProjectListItem = function() {
             clearDom();
             createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
             mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)].taskList.forEach((item) => { 
-                createTaskItem(String(item.name), String(item.details), item.date)
+                createTaskItem(String(item.name), String(item.details), item.date, item.important)
             })
         }
         
