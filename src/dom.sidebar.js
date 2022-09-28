@@ -7,6 +7,7 @@ import { projectFactory, addToProjects } from "./projects.module.js"
 import MenuIcon from '../images/project-menu.svg';
 import VerticalDots from '../images/dots-vertical.svg';
 import {createMainProject, createTaskItem} from './dom.main.project.js';
+import { sortToday } from "./sort.module";
 
 export const formDataStore = {
     value: 0,
@@ -57,6 +58,11 @@ export const addSidebarEvent = function() {
     todayTitle.addEventListener("click", () => {
         clearDom();
         createMainToday();
+        sortToday();
+        const taskDiv = document.createElement("div");
+        const contentDiv = document.querySelector(".content");
+        taskDiv.classList.add("task-container");
+        contentDiv.append(taskDiv);  
         mainObject.today.tasks.forEach((project) => {          
             createTaskItem(String(project.name), String(project.details), project.date, project.important);
             })

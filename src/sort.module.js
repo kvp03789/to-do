@@ -15,6 +15,7 @@ export const sortImportant = function() {
 }
 
 export const sortToday = function() {
+    mainObject.today.tasks.length = 0;
     mainObject.projects.tasks.forEach((e) => {
         e.taskList.forEach((i) => {
             if (isToday(i.date)){
@@ -35,10 +36,13 @@ export const sortThisWeek = function() {
 }
 
 const isToday = function(date) {
-    const today = new Date();
-    return (today.toDateString() == new Date(date).toDateString())
+    const today = new Date().toISOString().split('T')[0];
+    console.log(today)
+    return today == date;
+    
 }
 
 // const isWeek = function(date) {
+//     const today = new Date().toISOString().split('T')[0];
 //     const thisWeek = newDate();
 // }

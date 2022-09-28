@@ -292,6 +292,7 @@ const createTaskForm = function(project, num) {
         sortToday();
         // sortThisWeek();
         sortImportant();
+        console.log(dateInput.value)
     })
 }
 
