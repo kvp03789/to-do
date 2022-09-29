@@ -10,7 +10,7 @@ export const projectFactory = (title) => {
 
     const deleteTask = function(task) {
         taskList.forEach((i) => {
-            if (i.name === task){
+            if (i.name === task.name){
                 taskList.splice(`${taskList.indexOf(i)}`, 1);
             }
         })

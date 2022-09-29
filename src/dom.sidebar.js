@@ -6,8 +6,9 @@ import { createMainImportant } from "./dom.main.important";
 import { projectFactory, addToProjects } from "./projects.module.js"
 import MenuIcon from '../images/project-menu.svg';
 import VerticalDots from '../images/dots-vertical.svg';
-import {createMainProject, createTaskItem} from './dom.main.project.js';
-import { sortToday } from "./sort.module";
+import {applyDataIndex, createMainProject, createTaskItem} from './dom.main.project.js';
+import { isToday } from "./sort.module";
+import {isThisWeek} from 'date-fns';
 
 export const formDataStore = {
     value: 0,
@@ -49,31 +50,46 @@ export const addSidebarEvent = function() {
         clearDom();
         createMainAll();
         mainObject.projects.tasks.forEach((project) => {
-            project.taskList.forEach((item) => {
-                createTaskItem(String(item.name), String(item.details), item.date, item.important)
+            project.taskList.forEach((task) => {
+                createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));       
             })
-        });
+        })
+        applyDataIndex();
     })
 
     todayTitle.addEventListener("click", () => {
         clearDom();
         createMainToday();
-        sortToday();
         const taskDiv = document.createElement("div");
         const contentDiv = document.querySelector(".content");
         taskDiv.classList.add("task-container");
         contentDiv.append(taskDiv);  
-        mainObject.today.tasks.forEach((project) => {          
-            createTaskItem(String(project.name), String(project.details), project.date, project.important);
+        mainObject.projects.tasks.forEach((project) => {
+            project.taskList.forEach((task) => {
+                if (isToday(task.date)) {
+                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+                }         
             })
+        })
+        applyDataIndex();
     });
 
     weekTitle.addEventListener("click", () => {
         clearDom();
         createMainWeek();
-        // mainObject.thisWeek.tasks.forEach((i) => {
-        //     console.log(i.name);
-        // })
+        const taskDiv = document.createElement("div");
+        const contentDiv = document.querySelector(".content");
+        taskDiv.classList.add("task-container");
+        contentDiv.append(taskDiv);
+        mainObject.projects.tasks.forEach((project) => {
+            project.taskList.forEach((task) => {
+                let newDate = new Date(task.date);
+                if (isThisWeek(newDate, { weekStartsOn: 0 })) {
+                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+                }         
+            })
+        })
+        applyDataIndex();
     });
 
     importantTitle.addEventListener("click", () => {
@@ -83,9 +99,14 @@ export const addSidebarEvent = function() {
         const contentDiv = document.querySelector(".content");
         taskDiv.classList.add("task-container");
         contentDiv.append(taskDiv);       
-        mainObject.important.tasks.forEach((project) => {
-            createTaskItem(String(project.name), String(project.details), project.date, project.important);
+        mainObject.projects.tasks.forEach((project) => {
+            project.taskList.forEach((task) => {
+                if(task.important == true) {
+                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+                }         
+            })
         })
+        applyDataIndex();
     });
 
     addProjects.addEventListener("click", () => { 
@@ -98,26 +119,38 @@ export const addSidebarEvent = function() {
 
     addButton.addEventListener("click", (e) => {
         e.preventDefault();
-        let value = String(inputField.value);
-        formDataStore.setValue(value);
-        const newProject = projectFactory(value);
+        const newProject = projectFactory(inputField.value);
         addToProjects(newProject);
+
         inputField.value = "";
         formDiv.classList.add("hidden");
-        makeProjectListItem();
+        clearProjectsList();
+        mainObject.projects.tasks.forEach((x) => {
+            makeProjectListItem(x);
+        })
     })
-
 }
-const makeProjectListItem = function() {
+
+const clearProjectsList = function() {
+    const allProjects = document.querySelector(".projects-list");
+    formDataStore.taskCounter = 0;
+    while(allProjects.firstChild) {
+        allProjects.firstChild.remove();
+    }
+}
+
+const makeProjectListItem = function(proj) {
     const projectsList = document.querySelector(".projects-list");
 
     const newItem = document.createElement("div");
     newItem.classList.add("project-list-item")
+    newItem.classList.add("sub-title");
     newItem.setAttribute("data-index", String(formDataStore.counter))
     formDataStore.counter++;
     const menuIcon = new Image();
     menuIcon.src = MenuIcon;
-    const projectTitle = document.createElement("span");
+    // const projectTitle = document.createElement("span");
+    const projectTitle = document.createTextNode(`${proj.title}`)
     const vertDots = new Image();
     vertDots.src = VerticalDots;
 
@@ -131,26 +164,75 @@ const makeProjectListItem = function() {
 
     // newItem.setAttribute("data-index", "0")
     formDataStore.array.push(value);
-
-    left.append(menuIcon, projectTitle)
-    right.append(vertDots);
-    newItem.append(left, right);
-    projectsList.append(newItem);
+    
 
     newItem.addEventListener("click", (e) => {
         clearDom();
-        if (mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)].taskList.length === 0) {
-            createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
+        if(proj.taskList.length === 0) {
+            createMainProject(proj)
             formDataStore.dataVal = (e.target.dataset.index);
         }
         else {
-            clearDom();
-            createMainProject(mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)]);
-            mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)].taskList.forEach((item) => { 
-                createTaskItem(String(item.name), String(item.details), item.date, item.important, mainObject.projects.tasks[formDataStore.array.indexOf(`${value}`)])
+        createMainProject(proj);
+        proj.taskList.forEach((task) => {
+            createTaskItem(`${task.name}`, `${task.details}`, task.date, task.important, proj, proj.taskList.indexOf(task));
             })
         }
-        
+        applyDataIndex();
     })
 
+    const optionsMenu = document.createElement("div");
+    const editOption = document.createElement("div");
+    const deleteOption = document.createElement("div");
+    const dotsContainer = document.createElement("div");
+    dotsContainer.classList.add("dots-container");
+    optionsMenu.classList.add("options-menu");
+    editOption.classList.add("option-item");
+    deleteOption.classList.add("option-item");
+    editOption.setAttribute("id", "option-edit");
+    deleteOption.setAttribute("id", "option-delete");
+    optionsMenu.classList.add("hidden2");
+    editOption.innerText = "Edit";
+    deleteOption.innerText = "Delete";
+    optionsMenu.append(editOption, deleteOption);
+    dotsContainer.append(vertDots, optionsMenu)
+    newItem.append(menuIcon, projectTitle, dotsContainer);
+    projectsList.append(newItem);
+    
+
+    vertDots.addEventListener("click", (e) => {
+        optionsMenu.classList.toggle("hidden2");
+        dotsContainer.classList.toggle("dots-selected");
+    });
+
+    editOption.addEventListener("click", (e) => {
+
+    })
+
+    deleteOption.addEventListener("click", (e) => {
+        mainObject.projects.tasks.splice(mainObject.projects.tasks.indexOf(proj), 1);
+        clearProjectsList();
+        mainObject.projects.tasks.forEach((x) => {
+            makeProjectListItem(x);
+        })
+    })
+
+    const projBtns = document.getElementsByClassName("sub-title");
+    for (let i = 0; i < projBtns.length; i++) {
+        projBtns[i].addEventListener("click", (e) => {
+            let current = document.getElementsByClassName("selected");
+
+            if(current.length > 0) {
+                current[0].className = current[0].className.replace("selected", "");
+            }
+            e.target.classList.add("selected");
+        });
+        
+    }
+}
+
+const createUpdateForm = function(ele) {
+    const inputField = document.createElement("input");
+    const cancelButton = document.createElement("button");
+    const addButton = document.createElement("button");
 }

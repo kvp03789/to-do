@@ -1,6 +1,6 @@
 import { mainObject } from "./global.module";
 import {isThisWeek} from 'date-fns';
-import { getDate } from "date-fns";
+
 
 
 export const sortImportant = function() {
@@ -26,16 +26,18 @@ export const sortToday = function() {
 }
 
 export const sortThisWeek = function() {
+    mainObject.thisWeek.tasks.length = 0;
     mainObject.projects.tasks.forEach((e) => {
         e.taskList.forEach((i) => {
-            if (isThisWeek(i.date)){
+            let newDate = new Date(i.date);
+            if (isThisWeek(newDate, { weekStartsOn: 0 })) {
                 mainObject.thisWeek.tasks.push(i);
             }
         })
     }) 
 }
 
-const isToday = function(date) {
+export const isToday = function(date) {
     const today = new Date().toISOString().split('T')[0];
     console.log(today)
     return today == date;
