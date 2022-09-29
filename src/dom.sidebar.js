@@ -198,7 +198,43 @@ const makeProjectListItem = function(proj) {
     dotsContainer.append(vertDots, optionsMenu)
     newItem.append(menuIcon, projectTitle, dotsContainer);
     projectsList.append(newItem);
-    
+
+    //UPDATE PROJECT FORM
+    const updateFormContainer = document.createElement("div");
+    const btnContainer = document.createElement("div");
+    const inputField = document.createElement("input");
+    const cancelButton = document.createElement("button");
+    const addButton = document.createElement("button");
+    inputField.value = proj.title;
+    addButton.innerText = "Add";
+    cancelButton.innerText = "Cancel";
+    btnContainer.append(cancelButton, addButton);
+    updateFormContainer.append(inputField, btnContainer);
+    updateFormContainer.classList.add("hidden-project-form");
+    updateFormContainer.classList.add("really-hidden");
+    addButton.setAttribute("id", "add-button");
+    cancelButton.setAttribute("id", "cancel-button");
+    projectsList.append(updateFormContainer);
+
+    addButton.addEventListener("click", (e)=> {
+        proj.title = inputField.value;
+        inputField.value = "";
+        updateFormContainer.classList.toggle("really-hidden");
+        clearProjectsList();
+        mainObject.projects.tasks.forEach((x) => {
+            makeProjectListItem(x);
+        })
+        clearDom();
+        createMainProject(proj);
+        proj.taskList.forEach((task) => {
+            createTaskItem(task.name, task.details, task.date, task.important, proj, proj.taskList.indexOf(task))
+        }) 
+    })
+
+    cancelButton.addEventListener("click", (e)=> {
+        inputField.value = "";
+        updateFormContainer.classList.toggle("really-hidden");
+    })
 
     vertDots.addEventListener("click", (e) => {
         optionsMenu.classList.toggle("hidden2");
@@ -206,7 +242,9 @@ const makeProjectListItem = function(proj) {
     });
 
     editOption.addEventListener("click", (e) => {
-
+        updateFormContainer.classList.toggle("really-hidden");
+        optionsMenu.classList.toggle("hidden2");
+        dotsContainer.classList.toggle("dots-selected");
     })
 
     deleteOption.addEventListener("click", (e) => {
@@ -229,10 +267,21 @@ const makeProjectListItem = function(proj) {
         });
         
     }
+    // createUpdateForm(newItem);
 }
 
-const createUpdateForm = function(ele) {
-    const inputField = document.createElement("input");
-    const cancelButton = document.createElement("button");
-    const addButton = document.createElement("button");
-}
+// const createUpdateForm = function(ele) {
+//     const updateFormContainer = document.createElement("div");
+//     const btnContainer = document.createElement("div");
+//     const inputField = document.createElement("input");
+//     const cancelButton = document.createElement("button");
+//     const addButton = document.createElement("button");
+
+//     addButton.innerText = "Add";
+//     cancelButton.innerText = "Cancel";
+//     btnContainer.append(cancelButton, addButton);
+//     updateFormContainer.append(inputField, btnContainer);
+//     updateFormContainer.classList.add("hidden-project-form");
+//     updateFormContainer.classList.add("really-hidden");
+//     ele.append(updateFormContainer);
+// }

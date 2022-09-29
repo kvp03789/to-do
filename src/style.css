@@ -452,3 +452,24 @@ label {
     filter: invert(84%) sepia(66%) saturate(1882%) hue-rotate(355deg) brightness(99%) contrast(103%);
     fill: #ffee00;
   }
+
+  .hidden-project-form {
+    /* position:absolute; */
+    font-family: 'OpenSans';
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 7px;
+    padding-left: 15px;
+  }
+
+  .hidden-project-form input {
+    width: 100%
+  }
+
+  .really-hidden {
+    display: none;
+  }
