@@ -502,4 +502,17 @@ label {
 
   .line-through {
     text-decoration: line-through;
+  }  
+  
+  .new-task-item-completed {
+    width: 95%;
+    height: 60px;
+    border: 1px solid rgb(157, 157, 157);
+    background-color: rgba(0, 0, 0, 0.042);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    color:#ccc;
   }

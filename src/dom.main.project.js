@@ -38,7 +38,11 @@ export const createTaskItem = function(name, details, date, important, project, 
     detailsSpan.classList.add("task-details-span");
     dateDiv.classList.add(".date-div");
     dateSpan.classList.add(".task-date-span");
-    newItemBox.classList.add("new-task-item");
+    if (project.taskList[num].completed === 1) {
+        newItemBox.classList.add("new-task-item-completed");
+    } else {
+        newItemBox.classList.add("new-task-item");
+    }
     dateDiv.classList.add("date-div");
     star.classList.add("star-svg");
     filledStar.classList.add("star-svg");
@@ -106,6 +110,8 @@ export const createTaskItem = function(name, details, date, important, project, 
         })
         applyDataIndex();
         
+        
+        
     })
 
     verticalDots.addEventListener("click", (e) => {
@@ -120,6 +126,7 @@ export const createTaskItem = function(name, details, date, important, project, 
         newItemBox.classList.toggle("line-through");
         if (project.taskList[num].completed === 0) {
             project.taskList[num].completed = 1;
+            newItemBox.classList.replace("new-task-item", "new-task-item-completed");
         } else {
             project.taskList[num].completed = 0;
         }
@@ -143,7 +150,12 @@ const starEvent = function (x, project, num) {
         else {
             project.taskList[num].important = 1;
         }
-        sortImportant();
+        clearDom();
+        createMainProject(project);
+        project.taskList.forEach((ta) => {
+            createTaskItem(ta.name, ta.details, ta.date, ta.important, project, project.taskList.indexOf(ta), ta.completed)
+            applyDataIndex();
+        })
         })
 }
 
