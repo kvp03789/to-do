@@ -3,6 +3,7 @@ import PlusIcon from '../images/plus.svg';
 import StarIcon from '../images/important-star.svg';
 import FilledStarIcon from '../images/filled.svg';
 import VerticalDots from '../images/dots-vertical.svg';
+import CheckMark from '../images/checkmark.svg';
 import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
 import {formDataStore} from './dom.sidebar.js';
@@ -10,18 +11,18 @@ import {sortToday, sortThisWeek, sortImportant} from './sort.module.js';
 import { clearDom } from './dom.main.all';
 
 
-export const createTaskItem = function(name, details, date, important, project, num) {
+export const createTaskItem = function(name, details, date, important, project, num, completed) {
     const taskContainer = document.querySelector(".task-container");
     const contentDiv = document.querySelector(".content");
     const newItemBox = document.createElement("div");
     const left = document.createElement("div");
     const right = document.createElement("div");
-    const checkBox = document.createElement("input");
-    checkBox.setAttribute("type", "radio");
     const titleSpan = document.createElement("span");
     const detailsSpan = document.createElement("span");
     const dateDiv = document.createElement("div");
     const dateSpan = document.createElement("span");
+    const checkMarkDiv = document.createElement("div");
+    const checkMark = new Image();
     const star = new Image();
     const verticalDots = new Image();
     const filledStar = new Image();
@@ -31,19 +32,22 @@ export const createTaskItem = function(name, details, date, important, project, 
     if(important == true) {star.src = FilledStarIcon}
     else {star.src = StarIcon;}
     
-    filledStar.src = FilledStarIcon
-    titleSpan.classList.add("task-title-span")
+    checkMark.src = CheckMark;
+    filledStar.src = FilledStarIcon;
+    titleSpan.classList.add("task-title-span");
     detailsSpan.classList.add("task-details-span");
     dateDiv.classList.add(".date-div");
     dateSpan.classList.add(".task-date-span");
     newItemBox.classList.add("new-task-item");
-    dateDiv.classList.add("date-div")
+    dateDiv.classList.add("date-div");
     star.classList.add("star-svg");
     filledStar.classList.add("star-svg");
     verticalDots.classList.add("dots-svg")
     right.classList.add("task-right");
-    left.classList.add("task-left")
-
+    left.classList.add("task-left");
+    checkMarkDiv.classList.add("check-div");
+    checkMark.classList.add("check-svg");
+    checkMark.classList.add("hidden");
 
     titleSpan.innerText = name; //data from obj
     detailsSpan.innerText = details; //data from obj
@@ -66,11 +70,18 @@ export const createTaskItem = function(name, details, date, important, project, 
     dotsContainer.append(verticalDots, optionsMenu);
 
     dateDiv.append(dateSpan);
-    
+    checkMarkDiv.append(checkMark);
     right.append(dateDiv, star, dotsContainer)
-    left.append(checkBox, titleSpan, detailsSpan);
+    left.append(checkMarkDiv, titleSpan, detailsSpan);
     newItemBox.append(left, right);
     taskContainer.append(newItemBox);
+
+    if (project.taskList[num].completed === 1) {
+        newItemBox.classList.add("line-through");
+        checkMark.classList.remove("hidden");
+    } else if (project.taskList[num].completed === 0) {
+        checkMark.classList.add("hidden");
+    }
 
     //EVENT LISTENERS FOR EACH ITEM
 
@@ -91,7 +102,7 @@ export const createTaskItem = function(name, details, date, important, project, 
         clearDom();
         createMainProject(project);
         project.taskList.forEach((task) => {
-            createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+            createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task), task.completed);
         })
         applyDataIndex();
         
@@ -103,6 +114,22 @@ export const createTaskItem = function(name, details, date, important, project, 
     });
 
     starEvent(star, project, num);
+
+    checkMarkDiv.addEventListener("click", (e) => {
+        checkMark.classList.toggle("hidden");
+        newItemBox.classList.toggle("line-through");
+        if (project.taskList[num].completed === 0) {
+            project.taskList[num].completed = 1;
+        } else {
+            project.taskList[num].completed = 0;
+        }
+        clearDom();
+        createMainProject(project);
+        project.taskList.forEach((ta) => {
+            createTaskItem(ta.name, ta.details, ta.date, ta.important, project, project.taskList.indexOf(ta), ta.completed)
+            applyDataIndex();
+        })
+    })
 }
 
 const starEvent = function (x, project, num) {
@@ -190,11 +217,11 @@ const createUpdateTaskForm = function(project, num) {
         } else {
             project.taskList[num].important = 0;
         }
-
+        project.taskList[num].completed = 0;
         clearDom();
         createMainProject(project);
         project.taskList.forEach((task) => {
-            createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+            createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task), task.completed);
         })
         applyDataIndex();
     })
@@ -209,7 +236,7 @@ const createUpdateTaskForm = function(project, num) {
         clearDom();
         createMainProject(project);
         project.taskList.forEach((arr) => {
-            createTaskItem(arr.name, arr.details, arr.date, arr.important, project);
+            createTaskItem(arr.name, arr.details, arr.date, arr.important, project, project.arr.taskList.indexOf(arr), completed);
         })
     })
 }
@@ -273,17 +300,16 @@ const createTaskForm = function(project, num) {
         let value1 = titleInput.value;
         e.preventDefault();
         newTaskFormDiv.classList.add("hidden");
-        project.createTask(String(value1), detailsInput.value, dateInput.value, importantValue)
-        sortToday();
-        sortThisWeek();
-        sortImportant();
+        project.createTask(String(value1), detailsInput.value, dateInput.value, importantValue, 0)
+        // sortToday();
+        // sortThisWeek();
+        // sortImportant();
         clearDom();
         createMainProject(project);
         project.taskList.forEach((ta) => {
-            createTaskItem(ta.name, ta.details, ta.date, ta.important, project, project.taskList.indexOf(ta))
+            createTaskItem(ta.name, ta.details, ta.date, ta.important, project, project.taskList.indexOf(ta), ta.completed)
             applyDataIndex();
         })
-        
     })
 
     cancelButton.addEventListener("click", (e) => {
@@ -296,7 +322,7 @@ const createTaskForm = function(project, num) {
         clearDom();
         createMainProject(project);
         project.taskList.forEach((arr) => {
-            createTaskItem(arr.name, arr.details, arr.date, arr.important, project);
+            createTaskItem(arr.name, arr.details, arr.date, arr.important, project, project.arr.taskList.indexOf(arr), arr.completed);
         })
     })
 }

@@ -4,8 +4,8 @@ import { mainObject } from "./global.module";
 export const projectFactory = (title) => {
     const taskList = [];
 
-    const createTask = (name, details, date, important) => {
-        taskList.push({name, details, date, important}); 
+    const createTask = (name, details, date, important, completed) => {
+        taskList.push({name, details, date, important, completed}); 
     };
 
     const deleteTask = function(task) {

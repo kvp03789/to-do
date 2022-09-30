@@ -51,7 +51,7 @@ export const addSidebarEvent = function() {
         createMainAll();
         mainObject.projects.tasks.forEach((project) => {
             project.taskList.forEach((task) => {
-                createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));       
+                createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task), task.completed);       
             })
         })
         applyDataIndex();
@@ -67,7 +67,7 @@ export const addSidebarEvent = function() {
         mainObject.projects.tasks.forEach((project) => {
             project.taskList.forEach((task) => {
                 if (isToday(task.date)) {
-                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task), task.completed);
                 }         
             })
         })
@@ -85,7 +85,7 @@ export const addSidebarEvent = function() {
             project.taskList.forEach((task) => {
                 let newDate = new Date(task.date);
                 if (isThisWeek(newDate, { weekStartsOn: 0 })) {
-                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task), task.completed);
                 }         
             })
         })
@@ -102,7 +102,7 @@ export const addSidebarEvent = function() {
         mainObject.projects.tasks.forEach((project) => {
             project.taskList.forEach((task) => {
                 if(task.important == true) {
-                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task));
+                    createTaskItem(task.name, task.details, task.date, task.important, project, project.taskList.indexOf(task), task.completed);
                 }         
             })
         })
@@ -175,7 +175,7 @@ const makeProjectListItem = function(proj) {
         else {
         createMainProject(proj);
         proj.taskList.forEach((task) => {
-            createTaskItem(`${task.name}`, `${task.details}`, task.date, task.important, proj, proj.taskList.indexOf(task));
+            createTaskItem(`${task.name}`, `${task.details}`, task.date, task.important, proj, proj.taskList.indexOf(task), task.completed);
             })
         }
         applyDataIndex();
@@ -227,7 +227,7 @@ const makeProjectListItem = function(proj) {
         clearDom();
         createMainProject(proj);
         proj.taskList.forEach((task) => {
-            createTaskItem(task.name, task.details, task.date, task.important, proj, proj.taskList.indexOf(task))
+            createTaskItem(task.name, task.details, task.date, task.important, proj, proj.taskList.indexOf(task), task.completed)
         }) 
     })
 
