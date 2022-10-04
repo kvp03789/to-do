@@ -383,13 +383,13 @@ export const createMainProject = function(project) {
     removeCompletedDiv.addEventListener("click", () => {
         project.taskList.forEach((z) => {
             if (z.completed === 1) {
-                project.taskList.splice(`${project.taskList.indexOf(project.taskList[z])}`, 1);
+                project.taskList.splice(`${project.taskList.indexOf(z)}`, 1);
             }
         })
         clearDom();
         createMainProject(project);
         project.taskList.forEach((arr) => {
-            createTaskItem(arr.name, arr.details, arr.date, arr.important, project, project.arr.taskList.indexOf(arr), arr.completed);
+            createTaskItem(arr.name, arr.details, arr.date, arr.important, project, project.taskList.indexOf(arr), arr.completed);
         })
     })
 }
