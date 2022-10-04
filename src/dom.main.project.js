@@ -4,6 +4,7 @@ import StarIcon from '../images/important-star.svg';
 import FilledStarIcon from '../images/filled.svg';
 import VerticalDots from '../images/dots-vertical.svg';
 import CheckMark from '../images/checkmark.svg';
+import Minus from '../images/minus.svg';
 import projectFactory from './projects.module.js';
 import {mainObject} from './global.module.js';
 import {formDataStore} from './dom.sidebar.js';
@@ -101,7 +102,6 @@ export const createTaskItem = function(name, details, date, important, project, 
     })
     
     deleteOption.addEventListener("click", (e) => {
-        console.log(project.taskList.indexOf(project.taskList[num]));
         project.taskList.splice(project.taskList.indexOf(project.taskList[num]) , 1); 
         clearDom();
         createMainProject(project);
@@ -351,24 +351,46 @@ export const createMainProject = function(project) {
     title.innerText = `${project.title}`;
 
     const taskButtonDiv = document.createElement("div");
+    const removeCompletedDiv = document.createElement("div");
     const plusIcon = new Image();
+    const minusIcon = new Image();
     const addTaskSpan = document.createElement("span");
+    const removeCompletedSpan = document.createElement("span");
 
     plusIcon.src = PlusIcon;
+    minusIcon.src = Minus;
     taskButtonDiv.classList.add("task-button-div");
+    removeCompletedDiv.classList.add("task-button-div");
     plusIcon.classList.add("plus-svg");
+    minusIcon.classList.add("minus-svg");
     taskButtonDiv.classList.add("task-button-span");
+    removeCompletedDiv.classList.add("task-button-span");
     addTaskSpan.innerText = "Add Task";
+    removeCompletedSpan.innerText = "Remove Completed";
     taskContainer.classList.add("task-container");
 
     taskButtonDiv.append(plusIcon, addTaskSpan);
+    removeCompletedDiv.append(minusIcon, removeCompletedSpan)
 
     titleBlock.append(title);
     contentDiv.prepend(titleBlock);
-    contentDiv.append(titleBlock, taskContainer, taskButtonDiv);
+    contentDiv.append(titleBlock, taskContainer, taskButtonDiv, removeCompletedDiv);
 
     taskButtonDiv.addEventListener("click", () => {
         createTaskForm(project);
+    })
+
+    removeCompletedDiv.addEventListener("click", () => {
+        project.taskList.forEach((z) => {
+            if (z.completed === 1) {
+                project.taskList.splice(`${project.taskList.indexOf(project.taskList[z])}`, 1);
+            }
+        })
+        clearDom();
+        createMainProject(project);
+        project.taskList.forEach((arr) => {
+            createTaskItem(arr.name, arr.details, arr.date, arr.important, project, project.arr.taskList.indexOf(arr), arr.completed);
+        })
     })
 }
 

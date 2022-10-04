@@ -515,4 +515,9 @@ label {
     justify-content: space-between;
     padding: 10px;
     color:#ccc;
+  } 
+  
+  .minus-svg {
+    height: 20px;
+    width: auto;
   }
